@@ -1,0 +1,17 @@
+target/
+.idea/
+.vscode/
+*.iml
+*.class
+
+# Banco H2 (gerado em runtime)
+data/
+*.mv.db
+*.trace.db
+
+# Logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
