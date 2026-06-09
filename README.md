@@ -8,9 +8,9 @@ API REST em **Java + Spring Boot** que controla os recursos de uma base lunar (s
 
 | Nome | RM |
 |------|----|
-| (preencher) | (preencher) |
-| (preencher) | (preencher) |
-| (preencher) | (preencher) |
+| Luiz Henrique de Almeida | 564390 |
+| Tiago Ferreira | 562129 |
+
 
 ## Tecnologias
 
