@@ -28,6 +28,10 @@ public class Sensor {
 
     private String unidade;
 
+    // Faixa esperada de operacao do sensor - usada pra calcular o status da medicao
+    private Double valorMinimo;
+    private Double valorMaximo;
+
     private LocalDateTime ultimaLeitura;
 
     public Sensor() {
@@ -79,6 +83,22 @@ public class Sensor {
 
     public void setUnidade(String unidade) {
         this.unidade = unidade;
+    }
+
+    public Double getValorMinimo() {
+        return valorMinimo;
+    }
+
+    public void setValorMinimo(Double valorMinimo) {
+        this.valorMinimo = valorMinimo;
+    }
+
+    public Double getValorMaximo() {
+        return valorMaximo;
+    }
+
+    public void setValorMaximo(Double valorMaximo) {
+        this.valorMaximo = valorMaximo;
     }
 
     public LocalDateTime getUltimaLeitura() {
