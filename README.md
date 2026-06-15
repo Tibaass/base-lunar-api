@@ -10,6 +10,10 @@ API REST em **Java + Spring Boot** que controla os recursos de uma base lunar (s
 |------|----|
 | Luiz Henrique de Almeida | 564390 |
 | Tiago Ferreira | 562129 |
+| Mateus Bustamante | 564021 |
+| Erick Lima | 565268 |
+| Pedro Lopes | 565575 |
+| Christopher Lee | 563318 |
 
 
 ## Tecnologias

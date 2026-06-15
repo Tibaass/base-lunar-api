@@ -138,8 +138,11 @@ Se um sensor nao tiver valorMinimo / valorMaximo definidos,
 a medicao e classificada como NORMAL (nao da pra avaliar).
 
 ==============================================================
-Integrantes (preencher antes de enviar):
-  Nome: ____________________________  RM: ___________
-  Nome: ____________________________  RM: ___________
-  Nome: ____________________________  RM: ___________
+Integrantes:
+  Luiz Henrique de Almeida    RM: 564390
+  Tiago Ferreira              RM: 562129
+  Mateus Bustamante           RM: 564021
+  Erick Lima                  RM: 565268
+  Pedro Lopes                 RM: 565575
+  Christopher Lee             RM: 563318
 ==============================================================
