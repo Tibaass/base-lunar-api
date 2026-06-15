@@ -35,6 +35,8 @@ public class SensorService {
         sensor.setLocalizacao(novosDados.getLocalizacao());
         sensor.setValorAtual(novosDados.getValorAtual());
         sensor.setUnidade(novosDados.getUnidade());
+        sensor.setValorMinimo(novosDados.getValorMinimo());
+        sensor.setValorMaximo(novosDados.getValorMaximo());
         sensor.setUltimaLeitura(novosDados.getUltimaLeitura());
 
         return repository.save(sensor);
