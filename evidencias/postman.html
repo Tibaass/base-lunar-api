@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>Evidencias - Sprint 2</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background:#f4f5f7; margin:0; padding:24px; color:#1f2330; }
+  h1 { font-size:18px; margin:0 0 18px; color:#ff6c37; }
+  .card { background:#fff; border:1px solid #e1e3e8; border-radius:8px; margin-bottom:22px; box-shadow:0 1px 2px rgba(0,0,0,.04); overflow:hidden; }
+  .url { display:flex; align-items:center; padding:10px 14px; border-bottom:1px solid #e1e3e8; background:#fafbfc; font-family:Consolas, monospace; font-size:13px; }
+  .verb { font-weight:700; padding:4px 10px; border-radius:4px; margin-right:10px; color:#fff; font-size:12px; }
+  .post { background:#ff9d2e; }
+  .get  { background:#33a854; }
+  .path { color:#252b3a; }
+  .section-title { padding:8px 14px; font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:#6b7280; border-bottom:1px solid #eef0f3; background:#fcfcfd; }
+  pre { margin:0; padding:14px; background:#1e1f29; color:#e6e6e6; font-family:Consolas, monospace; font-size:12.5px; line-height:1.55; overflow-x:auto; }
+  .status { padding:6px 14px; font-size:12px; color:#16803c; background:#ecfdf3; border-top:1px solid #eef0f3; font-weight:600; }
+  .badge { display:inline-block; padding:1px 8px; border-radius:10px; font-size:11px; font-weight:700; margin-left:6px; }
+  .b-normal  { background:#d1fadf; color:#0f6d3a; }
+  .b-alerta  { background:#fef0c7; color:#92400e; }
+  .b-critico { background:#fee4e2; color:#9b1c1c; }
+  .key { color:#9cdcfe; }
+  .str { color:#ce9178; }
+  .num { color:#b5cea8; }
+  .lit { color:#569cd6; }
+  h1 small { color:#6b7280; font-weight:400; font-size:12px; margin-left:8px; }
+  .req-body { padding:14px; background:#fff; font-family:Consolas, monospace; font-size:12.5px; color:#252b3a; white-space:pre; }
+</style>
+</head>
+<body>
+
+<h1>Evidencia Sprint 2 - Base Lunar API <small>localhost:8080 - testado via Postman/curl</small></h1>
+
+<!-- 1 -->
+<div class="card" id="card1">
+  <div class="url"><span class="verb post">POST</span><span class="path">http://localhost:8080/api/sensores</span></div>
+  <div class="section-title">Body (raw, JSON)</div>
+  <div class="req-body">{
+  "nome": "Sensor temp Modulo A",
+  "tipo": "temperatura",
+  "localizacao": "Modulo Habitacional A",
+  "valorAtual": 22.0,
+  "unidade": "C",
+  "valorMinimo": 18.0,
+  "valorMaximo": 26.0,
+  "ultimaLeitura": "2026-06-15T10:00:00"
+}</div>
+  <div class="section-title">Response</div>
+<pre>{
+  <span class="key">"id"</span>: <span class="num">1</span>,
+  <span class="key">"nome"</span>: <span class="str">"Sensor temp Modulo A"</span>,
+  <span class="key">"tipo"</span>: <span class="str">"temperatura"</span>,
+  <span class="key">"localizacao"</span>: <span class="str">"Modulo Habitacional A"</span>,
+  <span class="key">"valorAtual"</span>: <span class="num">22.0</span>,
+  <span class="key">"unidade"</span>: <span class="str">"C"</span>,
+  <span class="key">"valorMinimo"</span>: <span class="num">18.0</span>,
+  <span class="key">"valorMaximo"</span>: <span class="num">26.0</span>,
+  <span class="key">"ultimaLeitura"</span>: <span class="str">"2026-06-15T10:00:00"</span>
+}</pre>
+  <div class="status">Status: 200 OK</div>
+</div>
+
+<!-- 2 -->
+<div class="card" id="card2">
+  <div class="url"><span class="verb post">POST</span><span class="path">http://localhost:8080/medicoes</span><span class="badge b-normal">NORMAL esperado</span></div>
+  <div class="section-title">Body</div>
+  <div class="req-body">{ "sensorId": 1, "valor": 22.0 }</div>
+  <div class="section-title">Response</div>
+<pre>{
+  <span class="key">"id"</span>: <span class="num">1</span>,
+  <span class="key">"sensorId"</span>: <span class="num">1</span>,
+  <span class="key">"sensorNome"</span>: <span class="str">"Sensor temp Modulo A"</span>,
+  <span class="key">"valor"</span>: <span class="num">22.0</span>,
+  <span class="key">"unidade"</span>: <span class="str">"C"</span>,
+  <span class="key">"data"</span>: <span class="str">"2026-06-15T20:41:51.63"</span>,
+  <span class="key">"status"</span>: <span class="str">"NORMAL"</span>
+}</pre>
+  <div class="status">Status: 200 OK - status calculado = NORMAL ✓</div>
+</div>
+
+<!-- 3 -->
+<div class="card" id="card3">
+  <div class="url"><span class="verb post">POST</span><span class="path">http://localhost:8080/medicoes</span><span class="badge b-alerta">ALERTA esperado</span></div>
+  <div class="section-title">Body</div>
+  <div class="req-body">{ "sensorId": 1, "valor": 18.5 }</div>
+  <div class="section-title">Response</div>
+<pre>{
+  <span class="key">"id"</span>: <span class="num">2</span>,
+  <span class="key">"sensorId"</span>: <span class="num">1</span>,
+  <span class="key">"sensorNome"</span>: <span class="str">"Sensor temp Modulo A"</span>,
+  <span class="key">"valor"</span>: <span class="num">18.5</span>,
+  <span class="key">"unidade"</span>: <span class="str">"C"</span>,
+  <span class="key">"data"</span>: <span class="str">"2026-06-15T20:41:51.73"</span>,
+  <span class="key">"status"</span>: <span class="str">"ALERTA"</span>
+}</pre>
+  <div class="status">Status: 200 OK - dentro da faixa mas a 0,5 da borda (margem = 0,8) ✓</div>
+</div>
+
+<!-- 4 -->
+<div class="card" id="card4">
+  <div class="url"><span class="verb post">POST</span><span class="path">http://localhost:8080/medicoes</span><span class="badge b-critico">CRITICO esperado</span></div>
+  <div class="section-title">Body</div>
+  <div class="req-body">{ "sensorId": 1, "valor": 35.0 }</div>
+  <div class="section-title">Response</div>
+<pre>{
+  <span class="key">"id"</span>: <span class="num">3</span>,
+  <span class="key">"sensorId"</span>: <span class="num">1</span>,
+  <span class="key">"sensorNome"</span>: <span class="str">"Sensor temp Modulo A"</span>,
+  <span class="key">"valor"</span>: <span class="num">35.0</span>,
+  <span class="key">"unidade"</span>: <span class="str">"C"</span>,
+  <span class="key">"data"</span>: <span class="str">"2026-06-15T20:41:51.79"</span>,
+  <span class="key">"status"</span>: <span class="str">"CRITICO"</span>
+}</pre>
+  <div class="status">Status: 200 OK - 9 graus acima do maximo (limite + 0,8) ✓</div>
+</div>
+
+<!-- 5 -->
+<div class="card" id="card5">
+  <div class="url"><span class="verb get">GET</span><span class="path">http://localhost:8080/medicoes</span></div>
+  <div class="section-title">Response</div>
+<pre>[
+  { <span class="key">"id"</span>:<span class="num">1</span>, <span class="key">"valor"</span>:<span class="num">22.0</span>, <span class="key">"status"</span>:<span class="str">"NORMAL"</span>,  <span class="key">"data"</span>:<span class="str">"2026-06-15T20:41:51.63"</span> },
+  { <span class="key">"id"</span>:<span class="num">2</span>, <span class="key">"valor"</span>:<span class="num">18.5</span>, <span class="key">"status"</span>:<span class="str">"ALERTA"</span>,  <span class="key">"data"</span>:<span class="str">"2026-06-15T20:41:51.73"</span> },
+  { <span class="key">"id"</span>:<span class="num">3</span>, <span class="key">"valor"</span>:<span class="num">35.0</span>, <span class="key">"status"</span>:<span class="str">"CRITICO"</span>, <span class="key">"data"</span>:<span class="str">"2026-06-15T20:41:51.79"</span> }
+]</pre>
+  <div class="status">Status: 200 OK - 3 registros</div>
+</div>
+
+<!-- 6 -->
+<div class="card" id="card6">
+  <div class="url"><span class="verb get">GET</span><span class="path">http://localhost:8080/medicoes/sensor/1</span></div>
+  <div class="section-title">Response (historico do sensor - mais recente primeiro)</div>
+<pre>[
+  { <span class="key">"id"</span>:<span class="num">3</span>, <span class="key">"valor"</span>:<span class="num">35.0</span>, <span class="key">"status"</span>:<span class="str">"CRITICO"</span> },
+  { <span class="key">"id"</span>:<span class="num">2</span>, <span class="key">"valor"</span>:<span class="num">18.5</span>, <span class="key">"status"</span>:<span class="str">"ALERTA"</span> },
+  { <span class="key">"id"</span>:<span class="num">1</span>, <span class="key">"valor"</span>:<span class="num">22.0</span>, <span class="key">"status"</span>:<span class="str">"NORMAL"</span> }
+]</pre>
+  <div class="status">Status: 200 OK - 3 registros</div>
+</div>
+
+<!-- 7 -->
+<div class="card" id="card7">
+  <div class="url"><span class="verb get">GET</span><span class="path">http://localhost:8080/medicoes/1</span></div>
+  <div class="section-title">Response</div>
+<pre>{
+  <span class="key">"id"</span>: <span class="num">1</span>,
+  <span class="key">"sensorId"</span>: <span class="num">1</span>,
+  <span class="key">"sensorNome"</span>: <span class="str">"Sensor temp Modulo A"</span>,
+  <span class="key">"valor"</span>: <span class="num">22.0</span>,
+  <span class="key">"unidade"</span>: <span class="str">"C"</span>,
+  <span class="key">"data"</span>: <span class="str">"2026-06-15T20:41:51.63"</span>,
+  <span class="key">"status"</span>: <span class="str">"NORMAL"</span>
+}</pre>
+  <div class="status">Status: 200 OK</div>
+</div>
+
+</body>
+</html>

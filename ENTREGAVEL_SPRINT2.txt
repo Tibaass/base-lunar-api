@@ -1,0 +1,145 @@
+==============================================================
+SPRINT 2 - BACKEND (Medicoes + Inteligencia de Status)
+Tecnicas Avancadas de Programacao - FIAP 2EMR
+==============================================================
+
+LINK DO BACKEND (repositorio no GitHub):
+https://github.com/Tibaass/base-lunar-api
+
+Branch / commit usado pra entrega: main (apos commits da Sprint 2)
+
+--------------------------------------------------------------
+COMO RODAR LOCAL
+--------------------------------------------------------------
+Pre-requisitos: JDK 17 e Maven instalados.
+
+    mvn spring-boot:run
+
+API sobe em http://localhost:8080
+H2 console em http://localhost:8080/h2-console
+JDBC URL: jdbc:h2:file:./data/baselunar  (user: sa, sem senha)
+
+--------------------------------------------------------------
+O QUE FOI ENTREGUE NESTA SPRINT
+--------------------------------------------------------------
+- Entidade Medicao (model/Medicao.java) com @ManyToOne pro Sensor,
+  campos valor e data, e tabela "medicoes".
+- Enum StatusMedicao (NORMAL, ALERTA, CRITICO).
+- MedicaoService com a regra de negocio do status (faixa do
+  sensor + margem de 10% pra classificar ALERTA / CRITICO).
+- MedicaoResponseDTO separando o retorno da API do model JPA,
+  ja com o status calculado.
+- Endpoints REST:
+    POST   /medicoes
+    GET    /medicoes
+    GET    /medicoes/{id}
+    GET    /medicoes/sensor/{id}
+- Sensor ganhou os campos valorMinimo e valorMaximo (faixa).
+- Testes JUnit em MedicaoServiceTest cobrindo as 3 faixas
+  de status.
+- README atualizado com explicacao da regra e exemplos.
+
+--------------------------------------------------------------
+EVIDENCIA DOS TESTES AUTOMATIZADOS (mvn test)
+--------------------------------------------------------------
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running br.com.fiap.baselunar.service.MedicaoServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0,
+       Time elapsed: 0.050 s
+[INFO]
+[INFO] Results:
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+
+Casos cobertos:
+  - valorNoMeioDaFaixaDeveSerNormal
+  - valorDentroDaFaixaMasPertoDaBordaDeveSerAlerta
+  - valorPoucoAcimaDoLimiteDeveSerAlerta
+  - valorMuitoAbaixoDoLimiteDeveSerCritico
+  - valorMuitoAcimaDoLimiteDeveSerCritico
+  - sensorSemFaixaConfiguradaCaiNoNormal
+
+--------------------------------------------------------------
+EVIDENCIA DOS ENDPOINTS (testado via curl, igual ao Postman)
+--------------------------------------------------------------
+
+1) Criando o sensor com a faixa esperada (18-26 C):
+
+   POST http://localhost:8080/api/sensores
+   {
+     "nome":"Sensor temp Modulo A",
+     "tipo":"temperatura",
+     "localizacao":"Modulo Habitacional A",
+     "valorAtual":22.0,
+     "unidade":"C",
+     "valorMinimo":18.0,
+     "valorMaximo":26.0,
+     "ultimaLeitura":"2026-06-15T10:00:00"
+   }
+   -> 200 OK
+   {"id":1,"nome":"Sensor temp Modulo A","tipo":"temperatura",
+    "localizacao":"Modulo Habitacional A","valorAtual":22.0,
+    "unidade":"C","valorMinimo":18.0,"valorMaximo":26.0,
+    "ultimaLeitura":"2026-06-15T10:00:00"}
+
+2) POST /medicoes com valor 22.0  -> status NORMAL
+
+   POST http://localhost:8080/medicoes
+   { "sensorId":1, "valor":22.0 }
+   -> {"id":1,"sensorId":1,"sensorNome":"Sensor temp Modulo A",
+       "valor":22.0,"unidade":"C",
+       "data":"2026-06-15T20:37:12.97","status":"NORMAL"}
+
+3) POST /medicoes com valor 18.5  -> status ALERTA
+   (dentro da faixa, mas a 0.5 da borda - menor que a margem de 0.8)
+
+   -> {"id":2,"sensorId":1,"valor":18.5,
+       "status":"ALERTA", ...}
+
+4) POST /medicoes com valor 35.0  -> status CRITICO
+
+   -> {"id":3,"sensorId":1,"valor":35.0,
+       "status":"CRITICO", ...}
+
+5) GET /medicoes  (lista geral, com status de cada uma)
+
+   [
+     {"id":1,"valor":22.0,"status":"NORMAL", ...},
+     {"id":2,"valor":18.5,"status":"ALERTA", ...},
+     {"id":3,"valor":35.0,"status":"CRITICO", ...}
+   ]
+
+6) GET /medicoes/sensor/1  (historico do sensor, mais recente primeiro)
+
+   [
+     {"id":3,"valor":35.0,"status":"CRITICO", ...},
+     {"id":2,"valor":18.5,"status":"ALERTA", ...},
+     {"id":1,"valor":22.0,"status":"NORMAL", ...}
+   ]
+
+7) GET /medicoes/1
+   -> {"id":1,"valor":22.0,"status":"NORMAL", ...}
+
+--------------------------------------------------------------
+REGRA DE STATUS (resumo)
+--------------------------------------------------------------
+- NORMAL : valor dentro da faixa [min, max] e longe das bordas.
+- ALERTA : valor dentro da faixa mas a < 10% da borda, OU
+           fora da faixa porem ainda dentro de 10% alem do limite.
+- CRITICO: valor ultrapassou o limite em mais de 10% da faixa.
+
+A margem de 10% e calculada em cima do tamanho da faixa
+(max - min). Pro sensor de exemplo (18-26 C) isso da
+0.8 grau de margem.
+
+Se um sensor nao tiver valorMinimo / valorMaximo definidos,
+a medicao e classificada como NORMAL (nao da pra avaliar).
+
+==============================================================
+Integrantes (preencher antes de enviar):
+  Nome: ____________________________  RM: ___________
+  Nome: ____________________________  RM: ___________
+  Nome: ____________________________  RM: ___________
+==============================================================
