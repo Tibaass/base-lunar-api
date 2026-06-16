@@ -8,6 +8,10 @@ https://github.com/Tibaass/base-lunar-api
 
 Branch / commit usado pra entrega: main (apos commits da Sprint 2)
 
+PRINTS DOS TESTES (Postman):
+https://github.com/Tibaass/base-lunar-api/blob/main/evidencias/postman_full.png
+(o arquivo postman_full.png foi enviado junto com este .txt)
+
 --------------------------------------------------------------
 COMO RODAR LOCAL
 --------------------------------------------------------------
